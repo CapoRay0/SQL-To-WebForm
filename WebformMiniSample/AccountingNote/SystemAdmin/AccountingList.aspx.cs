@@ -23,17 +23,25 @@ namespace Ray0728am.SystemAdmin
                 return;
             }
 
-            string account = this.Session["UserLoginInfo"] as string;
-            var dr = UserInfoManager.GetUserInfoByAccount(account);
+            var CurrentUser = AuthManager.GetCurrentUser();
 
-            if (dr == null)
+            if (CurrentUser == null) // 如果帳號不存在，導至登入頁 (有可能被管理者砍帳號)
             {
+                this.Session["UserLoginInfo"] = null; // 才不會無限迴圈，導來導去
                 Response.Redirect("/Login.aspx");
                 return;
             }
+            //string account = this.Session["UserLoginInfo"] as string;
+            //var dr = UserInfoManager.GetUserInfoByAccount(account);
+
+            //if (dr == null)
+            //{
+            //    Response.Redirect("/Login.aspx");
+            //    return;
+            //}
 
             // read accounting data
-            var dt = AccountingManager.GetAccountingList(dr["ID"].ToString());
+            var dt = AccountingManager.GetAccountingList(CurrentUser.ID);
 
             if (dt.Rows.Count > 0) // 如果DB沒資料
             {
@@ -57,7 +65,7 @@ namespace Ray0728am.SystemAdmin
         {
             var row = e.Row;
 
-            if(row.RowType == DataControlRowType.DataRow)
+            if (row.RowType == DataControlRowType.DataRow)
             {
                 //Literal ltl = row.FindControl("ltActType") as Literal;
                 Label lbl = row.FindControl("lblActType") as Label;
@@ -65,7 +73,7 @@ namespace Ray0728am.SystemAdmin
 
                 var dr = row.DataItem as DataRowView;
                 int actType = dr.Row.Field<int>("ActType");
-                
+
                 switch (actType)
                 {
                     case 0:

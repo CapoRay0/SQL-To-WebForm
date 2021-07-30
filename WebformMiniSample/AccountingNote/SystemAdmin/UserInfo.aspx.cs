@@ -23,11 +23,9 @@ namespace Ray0728am.SystemAdmin
                     return;
                 }
 
-                string account = this.Session["UserLoginInfo"] as string;
+                var CurrentUser = AuthManager.GetCurrentUser();
 
-                DataRow dr = UserInfoManager.GetUserInfoByAccount(account);
-
-                if (dr == null) // 如果帳號不存在，導至登入頁 (有可能被管理者砍帳號)
+                if (CurrentUser == null) // 如果帳號不存在，導至登入頁 (有可能被管理者砍帳號)
                 {
                     this.Session["UserLoginInfo"] = null; // 才不會無限迴圈，導來導去
                     Response.Redirect("/Login.aspx");
@@ -35,9 +33,26 @@ namespace Ray0728am.SystemAdmin
                 }
 
                 // 帳號存在則印出來
-                this.ltAccount.Text = dr["Account"].ToString();
-                this.ltName.Text = dr["Name"].ToString();
-                this.ltEmail.Text = dr["Email"].ToString();
+                this.ltAccount.Text = CurrentUser.Account;
+                this.ltName.Text = CurrentUser.Name;
+                this.ltEmail.Text = CurrentUser.Email;
+
+
+                //string account = this.Session["UserLoginInfo"] as string;
+
+                //DataRow dr = UserInfoManager.GetUserInfoByAccount(account);
+
+                //if (dr == null) // 如果帳號不存在，導至登入頁 (有可能被管理者砍帳號)
+                //{
+                //    this.Session["UserLoginInfo"] = null; // 才不會無限迴圈，導來導去
+                //    Response.Redirect("/Login.aspx");
+                //    return;
+                //}
+
+                //// 帳號存在則印出來
+                //this.ltAccount.Text = dr["Account"].ToString();
+                //this.ltName.Text = dr["Name"].ToString();
+                //this.ltEmail.Text = dr["Email"].ToString();
             }
         }
 

@@ -21,14 +21,22 @@ namespace Ray0728am.SystemAdmin
                 return;
             }
 
-            string account = this.Session["UserLoginInfo"] as string;
-            var drUserInfo = UserInfoManager.GetUserInfoByAccount(account);
+            var CurrentUser = AuthManager.GetCurrentUser();
 
-            if (drUserInfo == null)
+            if (CurrentUser == null) // 如果帳號不存在，導至登入頁 (有可能被管理者砍帳號)
             {
+                this.Session["UserLoginInfo"] = null; // 才不會無限迴圈，導來導去
                 Response.Redirect("/Login.aspx");
                 return;
             }
+            //string account = this.Session["UserLoginInfo"] as string;
+            //var drUserInfo = UserInfoManager.GetUserInfoByAccount(account);
+
+            //if (drUserInfo == null)
+            //{
+            //    Response.Redirect("/Login.aspx");
+            //    return;
+            //}
 
             if (!this.IsPostBack)
             {
@@ -45,7 +53,7 @@ namespace Ray0728am.SystemAdmin
                     int id;
                     if (int.TryParse(idText, out id)) // 檢查是否能轉型成數字
                     {
-                        var drAccounting = AccountingManager.GetAccounting(id, drUserInfo["ID"].ToString());
+                        var drAccounting = AccountingManager.GetAccounting(id, CurrentUser.ID);
 
                         if (drAccounting == null)
                         {

@@ -142,9 +142,9 @@
       <Project>{867b4cad-80dd-4bcf-847a-78ceba4b3cfb}</Project>
       <Name>AccountingNote.Auth</Name>
     </ProjectReference>
-    <ProjectReference Include="..\AccountingNote.DBsource\AccountingNote.DBsource.csproj">
+    <ProjectReference Include="..\AccountingNote.DBsource\AccountingNote.DBSource.csproj">
       <Project>{0c9e27f3-02e0-4cfc-92d9-1b55c46f7b7e}</Project>
-      <Name>AccountingNote.DBsource</Name>
+      <Name>AccountingNote.DBSource</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

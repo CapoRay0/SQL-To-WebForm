@@ -1,4 +1,5 @@
-﻿using AccountingNote.DBsource;
+﻿using AccountingNote.Auth;
+using AccountingNote.DBsource;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -15,7 +16,8 @@ namespace Ray0728am.SystemAdmin
         {
             if (!this.IsPostBack) // 可能是按鈕跳回本頁，所以要判斷 postback
             {
-                if (this.Session["UserLoginInfo"] == null) // Session存不存在，如果尚未登入，導至登入頁
+                //if (this.Session["UserLoginInfo"] == null)
+                if (!AuthManager.IsLogined()) // Session存不存在，如果尚未登入，導至登入頁
                 {
                     Response.Redirect("/Login.aspx");
                     return;

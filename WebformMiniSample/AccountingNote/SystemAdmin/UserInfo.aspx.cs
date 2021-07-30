@@ -57,7 +57,7 @@ namespace Ray0728am.SystemAdmin
 
         protected void btnLogout_Click(object sender, EventArgs e)
         {
-            //this.Session["UserLoginInfo"] = null; // 清除登入資訊，導至登入頁
+            //this.Session["UserLoginInfo"] = null;
             AuthManager.Logout(); // 登出，並導至登入頁
             Response.Redirect("/Login.aspx");
         }

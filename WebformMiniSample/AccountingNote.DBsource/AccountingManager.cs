@@ -123,29 +123,21 @@ namespace AccountingNote.DBsource
                     )
                 ";
 
-            // connect db & execute
-            using (SqlConnection conn = new SqlConnection(connStr))
+            List<SqlParameter> paramList = new List<SqlParameter>();
+            paramList.Add(new SqlParameter("@userID", userID));
+            paramList.Add(new SqlParameter("@caption", caption));
+            paramList.Add(new SqlParameter("@amount", amount));
+            paramList.Add(new SqlParameter("@actType", actType));
+            paramList.Add(new SqlParameter("@createDate", DateTime.Now));
+            paramList.Add(new SqlParameter("@body", body));
+
+            try
             {
-                using (SqlCommand comm = new SqlCommand(dbCommand, conn))
-                {
-                    comm.Parameters.AddWithValue("@userID", userID);
-                    comm.Parameters.AddWithValue("@caption", caption);
-                    comm.Parameters.AddWithValue("@amount", amount);
-                    comm.Parameters.AddWithValue("@actType", actType);
-                    comm.Parameters.AddWithValue("@createDate", DateTime.Now);
-                    comm.Parameters.AddWithValue("@body", body);
-
-                    try
-                    {
-                        conn.Open();
-                        comm.ExecuteNonQuery();
-
-                    }
-                    catch (Exception ex)
-                    {
-                        Logger.WriteLog(ex);
-                    }
-                }
+                DBHelper.CreatData(connStr, dbCommand, paramList);
+            }
+            catch (Exception ex)
+            {
+                Logger.WriteLog(ex);
             }
         }
 
@@ -210,7 +202,7 @@ namespace AccountingNote.DBsource
 
                 //    }
                 //}
-                int effectRows = DBHelper.ModyfyData(connStr, dbCommand, paramList);
+                int effectRows = DBHelper.ModifyData(connStr, dbCommand, paramList);
 
                 if (effectRows == 1)
                     return true;
@@ -240,7 +232,7 @@ namespace AccountingNote.DBsource
 
             try
             {
-                DBHelper.ModyfyData(connectionString, dbCommandString, paramList);
+                DBHelper.ModifyData(connectionString, dbCommandString, paramList);
             }
             catch (Exception ex)
             {

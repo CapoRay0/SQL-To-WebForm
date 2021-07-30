@@ -18,7 +18,6 @@ namespace AccountingNote.DBsource
         //    return val;
         //}
 
-
         /// <summary> 查詢流水帳清單 </summary>
         /// <param name="userID"></param>
         /// <returns></returns>
@@ -39,7 +38,7 @@ namespace AccountingNote.DBsource
             // 用List把Parameter裝起來，再裝到共用參數
             List<SqlParameter> list = new List<SqlParameter>();
             list.Add(new SqlParameter("@userID", userID));
-            try
+            try // 讓錯誤可以被凸顯，因此 TryCatch 不應該重構進 DBHelper
             {
                 return DBHelper.ReadDataTable(connStr, dbCommand, list);
             }
@@ -84,8 +83,6 @@ namespace AccountingNote.DBsource
                 return null;
             }
         }
-
-        
 
 
         /// <summary> 建立流水帳 </summary>
@@ -182,36 +179,49 @@ namespace AccountingNote.DBsource
                     WHERE
                         ID = @id ";
 
-            // connect db & execute
-            using (SqlConnection conn = new SqlConnection(connStr))
+            List<SqlParameter> paramList = new List<SqlParameter>();
+            paramList.Add(new SqlParameter("@userID", userID));
+            paramList.Add(new SqlParameter("@caption", caption));
+            paramList.Add(new SqlParameter("@amount", amount));
+            paramList.Add(new SqlParameter("@actType", actType));
+            paramList.Add(new SqlParameter("@createDate", DateTime.Now));
+            paramList.Add(new SqlParameter("@body", body));
+            paramList.Add(new SqlParameter("@id", ID));
+
+            try
             {
-                using (SqlCommand comm = new SqlCommand(dbCommand, conn))
-                {
-                    comm.Parameters.AddWithValue("@userID", userID);
-                    comm.Parameters.AddWithValue("@caption", caption);
-                    comm.Parameters.AddWithValue("@amount", amount);
-                    comm.Parameters.AddWithValue("@actType", actType);
-                    comm.Parameters.AddWithValue("@createDate", DateTime.Now);
-                    comm.Parameters.AddWithValue("@body", body);
-                    comm.Parameters.AddWithValue("@id", ID);
+                // connect db & execute
+                //using (SqlConnection conn = new SqlConnection(connStr))
+                //{
+                //    using (SqlCommand comm = new SqlCommand(dbCommand, conn))
+                //    {
+                //        //comm.Parameters.AddWithValue("@userID", userID);
+                //        //comm.Parameters.AddWithValue("@caption", caption);
+                //        //comm.Parameters.AddWithValue("@amount", amount);
+                //        //comm.Parameters.AddWithValue("@actType", actType);
+                //        //comm.Parameters.AddWithValue("@createDate", DateTime.Now);
+                //        //comm.Parameters.AddWithValue("@body", body);
+                //        //comm.Parameters.AddWithValue("@id", ID);
+                //        comm.Parameters.AddRange(paramList.ToArray());
 
-                    try
-                    {
-                        conn.Open();
-                        int effectRows = comm.ExecuteNonQuery();
 
-                        if (effectRows == 1)
-                            return true;
-                        else
-                            return false;
+                //        conn.Open();
+                //        int effectRows = comm.ExecuteNonQuery();
 
-                    }
-                    catch (Exception ex)
-                    {
-                        Logger.WriteLog(ex);
-                        return false;
-                    }
-                }
+                //    }
+                //}
+                int effectRows = DBHelper.ModyfyData(connStr, dbCommand, paramList);
+
+                if (effectRows == 1)
+                    return true;
+                else
+                    return false;
+
+            }
+            catch (Exception ex)
+            {
+                Logger.WriteLog(ex);
+                return false;
             }
         }
 
@@ -237,6 +247,7 @@ namespace AccountingNote.DBsource
                 Logger.WriteLog(ex);
             }
         }
+
 
     }
 }

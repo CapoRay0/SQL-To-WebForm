@@ -1,4 +1,5 @@
-﻿using AccountingNote.DBsource;
+﻿using AccountingNote.Auth;
+using AccountingNote.DBsource;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,34 +32,43 @@ namespace Ray0728am
             string inp_Account = this.txtAccount.Text; // inp 為 input
             string inp_PWD = this.txtPWD.Text;
 
-            // check empty
-            if (string.IsNullOrWhiteSpace(inp_Account) || string.IsNullOrWhiteSpace(inp_PWD))
+            string msg;
+            if (!AuthManager.TryLogin(inp_Account, inp_PWD, out msg))
             {
-                this.ltlMsg.Text = "Account / PWD is required.";
+                this.ltlMsg.Text = msg;
                 return;
             }
 
-            var dr = UserInfoManager.GetUserInfoByAccount(inp_Account); // 到DB查資料
+            Response.Redirect("/SystemAdmin/UserInfo.aspx");
 
-            //check null
-            if (dr == null)
-            {
-                this.ltlMsg.Text = "Account doesn't exists."; // 查不到的話
-                return;
-            }
+            //// check empty
+            //if (string.IsNullOrWhiteSpace(inp_Account) || string.IsNullOrWhiteSpace(inp_PWD))
+            //{
+            //    this.ltlMsg.Text = "Account / PWD is required.";
+            //    return;
+            //}
 
-            // check account / pwd
-            if (string.Compare(dr["Account"].ToString(), inp_Account, true) == 0 && 
-                string.Compare(dr["PWD"].ToString(), inp_PWD, false) == 0) // 因密碼要強制大小寫因此設定為false
-            {
-                this.Session["UserLoginInfo"] = dr["Account"].ToString(); // 正確!!，跳頁至 UserInfo.aspx
-                Response.Redirect("/SystemAdmin/UserInfo.aspx");
-            }
-            else
-            {
-                this.ltlMsg.Text = "Login failed. Please check PWD.";
-                return;
-            }
+            //var dr = UserInfoManager.GetUserInfoByAccount(inp_Account); // 到DB查資料
+
+            ////check null
+            //if (dr == null)
+            //{
+            //    this.ltlMsg.Text = "Account doesn't exists."; // 查不到的話
+            //    return;
+            //}
+
+            //// check account / pwd
+            //if (string.Compare(dr["Account"].ToString(), inp_Account, true) == 0 && 
+            //    string.Compare(dr["PWD"].ToString(), inp_PWD, false) == 0) // 因密碼要強制大小寫因此設定為false
+            //{
+            //    this.Session["UserLoginInfo"] = dr["Account"].ToString(); // 正確!!，跳頁至 UserInfo.aspx
+            //    Response.Redirect("/SystemAdmin/UserInfo.aspx");
+            //}
+            //else
+            //{
+            //    this.ltlMsg.Text = "Login failed. Please check PWD.";
+            //    return;
+            //}
 
         }
     }

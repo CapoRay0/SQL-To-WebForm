@@ -27,7 +27,7 @@ namespace Ray0728am.SystemAdmin
 
                 if (CurrentUser == null) // 如果帳號不存在，導至登入頁 (有可能被管理者砍帳號)
                 {
-                    this.Session["UserLoginInfo"] = null; // 才不會無限迴圈，導來導去
+                    //this.Session["UserLoginInfo"] = null; // 才不會無限迴圈，導來導去
                     Response.Redirect("/Login.aspx");
                     return;
                 }
@@ -36,7 +36,6 @@ namespace Ray0728am.SystemAdmin
                 this.ltAccount.Text = CurrentUser.Account;
                 this.ltName.Text = CurrentUser.Name;
                 this.ltEmail.Text = CurrentUser.Email;
-
 
                 //string account = this.Session["UserLoginInfo"] as string;
 
@@ -58,7 +57,8 @@ namespace Ray0728am.SystemAdmin
 
         protected void btnLogout_Click(object sender, EventArgs e)
         {
-            this.Session["UserLoginInfo"] = null; // 清除登入資訊，導至登入頁
+            //this.Session["UserLoginInfo"] = null; // 清除登入資訊，導至登入頁
+            AuthManager.Logout(); // 登出，並導至登入頁
             Response.Redirect("/Login.aspx");
         }
     }

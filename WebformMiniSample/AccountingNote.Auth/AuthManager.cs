@@ -26,7 +26,8 @@ namespace AccountingNote.Auth
             //}
         }
 
-
+        /// <summary> 取得已登入的使用者資訊 (如果沒有登入就回傳 null) </summary>
+        /// <returns></returns>
         public static UserInfoModel GetCurrentUser()
         {
             string account = HttpContext.Current.Session["UserLoginInfo"] as string;
@@ -38,7 +39,11 @@ namespace AccountingNote.Auth
             //return dr;
 
             if (dr == null)
+            {
+                HttpContext.Current.Session["UserLoginInfo"] = null; // 無限迴圈問題
                 return null;
+            }
+
 
             UserInfoModel model = new UserInfoModel();
             model.ID = dr["ID"].ToString();
@@ -47,6 +52,54 @@ namespace AccountingNote.Auth
             model.Email = dr["Email"].ToString();
 
             return model;
+        }
+
+        /// <summary> 登出 </summary>
+        public static void Logout()
+        {
+            HttpContext.Current.Session["UserLoginInfo"] = null;
+        }
+
+        /// <summary> 嘗試登入 </summary>
+        /// <param name="account"></param>
+        /// <param name="pwd"></param>
+        /// <param name="errorMsg"></param>
+        /// <returns></returns>
+        public static bool TryLogin(string account, string pwd, out string errorMsg)
+        {
+            // check empty
+            if (string.IsNullOrWhiteSpace(account) || string.IsNullOrWhiteSpace(pwd))
+            {
+                errorMsg = "Account / PWD is required.";
+                return false;
+            }
+
+            // read db and check
+            var dr = UserInfoManager.GetUserInfoByAccount(account);
+
+            //check null
+            if (dr == null)
+            {
+                errorMsg = "Account doesn't exists."; // 查不到的話
+                return false;
+            }
+
+            // check account / pwd
+            if (string.Compare(dr["Account"].ToString(), account, true) == 0 &&
+                string.Compare(dr["PWD"].ToString(), pwd, false) == 0) // 因密碼要強制大小寫因此設定為false
+            {
+                HttpContext.Current.Session["UserLoginInfo"] = dr["Account"].ToString(); // 正確!!，跳頁至 UserInfo.aspx
+                //Response.Redirect("/SystemAdmin/UserInfo.aspx");
+                errorMsg = string.Empty;
+                return true;
+            }
+            else
+            {
+                //this.ltlMsg.Text = "Login failed. Please check PWD.";
+                errorMsg = "Login failed. Please check PWD.";
+                return false;
+            }
+
         }
     }
 }

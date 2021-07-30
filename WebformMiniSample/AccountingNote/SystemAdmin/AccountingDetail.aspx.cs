@@ -88,17 +88,24 @@ namespace Ray0728am.SystemAdmin
                 return;
             }
 
-            string account = this.Session["UserLoginInfo"] as string;
-            var dr = UserInfoManager.GetUserInfoByAccount(account);
-
-            if (dr == null)
+            UserInfoModel currentUser = AuthManager.GetCurrentUser();
+            if (currentUser == null)
             {
                 Response.Redirect("/Login.aspx");
                 return;
             }
+            //string account = this.Session["UserLoginInfo"] as string;
+            //var dr = UserInfoManager.GetUserInfoByAccount(account);
 
+            //if (dr == null)
+            //{
+            //    Response.Redirect("/Login.aspx");
+            //    return;
+            //}
+
+            var CurrentUser = AuthManager.GetCurrentUser();
             // Input txt
-            string userID = dr["ID"].ToString();
+            string userID = CurrentUser.ID;
             string actTypeText = this.ddlActType.SelectedValue;
             string amountText = this.txtAmount.Text;
             string caption = this.txtCaption.Text;

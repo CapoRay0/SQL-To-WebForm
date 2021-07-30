@@ -92,5 +92,24 @@ namespace AccountingNote.DBsource
         //        }
         //    }
         //}
+
+        public static int ModyfyData(string connectionString, string dbCommandString, List<SqlParameter> paramList)
+        {
+            // connect db & execute
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                using (SqlCommand comm = new SqlCommand(dbCommandString, conn))
+                {
+
+                    //comm.Parameters.AddWithValue("@id", ID);
+                    comm.Parameters.AddRange(paramList.ToArray());
+
+                    conn.Open();
+                    int effectRowsCount = comm.ExecuteNonQuery();
+                    return effectRowsCount;
+                }
+            }
+        }
+
     }
 }

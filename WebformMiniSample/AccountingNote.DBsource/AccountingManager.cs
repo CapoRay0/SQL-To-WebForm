@@ -225,24 +225,16 @@ namespace AccountingNote.DBsource
                 @" DELETE [Accounting]
                     WHERE ID = @id ";
 
-            // connect db & execute
-            using (SqlConnection conn = new SqlConnection(connectionString))
+            List<SqlParameter> paramList = new List<SqlParameter>();
+            paramList.Add(new SqlParameter("@id", ID));
+
+            try
             {
-                using (SqlCommand comm = new SqlCommand(dbCommandString, conn))
-                {
-
-                    comm.Parameters.AddWithValue("@id", ID);
-
-                    try
-                    {
-                        conn.Open();
-                        int effectRows = comm.ExecuteNonQuery();
-                    }
-                    catch (Exception ex)
-                    {
-                        Logger.WriteLog(ex);
-                    }
-                }
+                DBHelper.ModyfyData(connectionString, dbCommandString, paramList);
+            }
+            catch (Exception ex)
+            {
+                Logger.WriteLog(ex);
             }
         }
 

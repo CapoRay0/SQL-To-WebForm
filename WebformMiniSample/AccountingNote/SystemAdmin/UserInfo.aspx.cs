@@ -22,7 +22,7 @@ namespace Ray0728am.SystemAdmin
                     Response.Redirect("/Login.aspx");
                     return;
                 }
-
+                
                 var CurrentUser = AuthManager.GetCurrentUser();
 
                 if (CurrentUser == null) // 如果帳號不存在，導至登入頁 (有可能被管理者砍帳號)

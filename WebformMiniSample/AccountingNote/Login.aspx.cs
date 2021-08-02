@@ -33,7 +33,7 @@ namespace Ray0728am
             string inp_PWD = this.txtPWD.Text;
 
             string msg;
-            if (!AuthManager.TryLogin(inp_Account, inp_PWD, out msg))
+            if(!AuthManager.TryLogin(inp_Account,inp_PWD, out msg))
             {
                 this.ltlMsg.Text = msg;
                 return;

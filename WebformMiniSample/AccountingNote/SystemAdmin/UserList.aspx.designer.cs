@@ -11,44 +11,26 @@ namespace Ray0728am.SystemAdmin
 {
 
 
-    public partial class AccountingList
+    public partial class UserList
     {
 
         /// <summary>
-        /// form1 控制項。
+        /// btnNew 控制項。
         /// </summary>
         /// <remarks>
         /// 自動產生的欄位。
         /// 若要修改，請將欄位宣告從設計工具檔案移到程式碼後置檔案。
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlForm form1;
+        protected global::System.Web.UI.WebControls.Button btnNew;
 
         /// <summary>
-        /// btnCreate 控制項。
+        /// GridView1 控制項。
         /// </summary>
         /// <remarks>
         /// 自動產生的欄位。
         /// 若要修改，請將欄位宣告從設計工具檔案移到程式碼後置檔案。
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnCreate;
-
-        /// <summary>
-        /// gvAccountingList 控制項。
-        /// </summary>
-        /// <remarks>
-        /// 自動產生的欄位。
-        /// 若要修改，請將欄位宣告從設計工具檔案移到程式碼後置檔案。
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.GridView gvAccountingList;
-
-        /// <summary>
-        /// ltpager 控制項。
-        /// </summary>
-        /// <remarks>
-        /// 自動產生的欄位。
-        /// 若要修改，請將欄位宣告從設計工具檔案移到程式碼後置檔案。
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal ltpager;
+        protected global::System.Web.UI.WebControls.GridView GridView1;
 
         /// <summary>
         /// ucPager 控制項。
@@ -60,12 +42,12 @@ namespace Ray0728am.SystemAdmin
         protected global::Ray0728am.UserControls.ucPager ucPager;
 
         /// <summary>
-        /// plcNoData 控制項。
+        /// ucPager1 控制項。
         /// </summary>
         /// <remarks>
         /// 自動產生的欄位。
         /// 若要修改，請將欄位宣告從設計工具檔案移到程式碼後置檔案。
         /// </remarks>
-        protected global::System.Web.UI.WebControls.PlaceHolder plcNoData;
+        protected global::Ray0728am.UserControls.ucPager ucPager1;
     }
 }

@@ -40,20 +40,104 @@ namespace Ray0728am.SystemAdmin
             //    return;
             //}
 
+
             // read accounting data
             var dt = AccountingManager.GetAccountingList(CurrentUser.ID);
 
-            if (dt.Rows.Count > 0) // 如果DB沒資料
+            if (dt.Rows.Count > 0) // 如果DB有資料
             {
-                this.gvAccountingList.DataSource = dt; // 資料繫結
+                //int totalPages = this.GetTotalPages(dt); // 取得總頁數
+                var dtPaged = this.GetPagedDataTable(dt);
+
+                this.gvAccountingList.DataSource = dtPaged; // 資料繫結
                 this.gvAccountingList.DataBind();
+
+                this.ucPager.TotalSize = dt.Rows.Count; //總頁數給dt筆數就好
+                this.ucPager.Bind(); // 可以利用 Method 來跟外界(這裡)溝通
+                //// 0802--------------------------------------------------------
+                //var pages = (dt.Rows.Count / 10); // 計算共幾筆、共幾頁
+                //if (dt.Rows.Count % 10 > 0)
+                //    pages += 1;
+
+                //this.ltpager.Text = $"共 {dt.Rows.Count} 筆，共 {pages} 頁，目前在第 {this.GetCurrentPage()} 頁<br/>";
+                ////--------------------------------------------------------
+
+                //for (var i = 1; i <= totalPages; i++) // 總頁數
+                //{
+                //    this.ltpager.Text += $"<a href='AccountingList.aspx?page={i}'>{i}</a>&nbsp";
+                //}
             }
             else
             {
                 this.gvAccountingList.Visible = false;
                 this.plcNoData.Visible = true;
             }
+        }
 
+        //private int GetTotalPages(DataTable dt) // 0802
+        //{
+        //    int pagers = dt.Rows.Count / 10;
+
+        //    if ((dt.Rows.Count % 10) > 0)
+        //        pagers += 1;
+
+        //    return pagers;
+        //    // 1 => 0
+        //    // 9 => 0
+        //    //10 => 1
+        //    //15 => 1
+        //}
+
+        private int GetCurrentPage()    
+        {
+            string pageText = Request.QueryString["Page"];
+
+            if (string.IsNullOrWhiteSpace(pageText)) // 空的時候，給第一頁
+                return 1;
+
+            int intPage;
+            if (!int.TryParse(pageText, out intPage)) // (錯誤) 數字轉換失敗，給第一頁
+                return 1;
+
+            if (intPage <= 0) // (錯誤) 0或以下，也給第一頁
+                return 1;
+
+            return intPage;
+        }
+
+        private DataTable GetPagedDataTable(DataTable dt)
+        {
+            DataTable dtPaged = dt.Clone(); //只拿結構
+            //dt.Copy(); // 除了結構還拿資料，但0筆的話會出錯
+
+            //foreach (DataRow dr in dt.Rows)
+            //for (var i = 0; i < dt.Rows.Count; i++)
+
+            int startIndex = (this.GetCurrentPage() - 1) * 10;
+            int endIndex = this.GetCurrentPage() * 10;
+
+            if (endIndex > dt.Rows.Count)
+                endIndex = dt.Rows.Count;
+
+            for (var i = startIndex; i < endIndex; i++)
+            {
+                DataRow dr = dt.Rows[i];
+                var drNew = dtPaged.NewRow();
+
+                foreach (DataColumn dc in dt.Columns)
+                {
+                    drNew[dc.ColumnName] = dr[dc];
+                }
+
+                //foreach (DataColumn dc in dtPaged.Columns)
+                //    drNew[dc.ColumnName] = dr[dc.ColumnName];
+
+                dtPaged.Rows.Add(drNew);
+            }
+            return dtPaged;
+            // dt = DataTable: 資料表
+            // dr = DataRows: 資料列
+            // dc = DataColumns: 資料內容
         }
 
         protected void btnCreate_Click(object sender, EventArgs e)

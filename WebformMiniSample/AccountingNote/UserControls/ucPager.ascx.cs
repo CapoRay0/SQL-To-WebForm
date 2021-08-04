@@ -61,7 +61,9 @@ namespace Ray0728am.UserControls
 
             return pagers;
         }
-
-
+        //AccountingList中
+        //PageSize="10"
+        //CurrentPage="1"
+        //TotalSize="10"
     }
 }

@@ -74,8 +74,8 @@
     <Content Include="SystemAdmin\AccountingDetail.aspx" />
     <Content Include="SystemAdmin\AccountingList.aspx" />
     <Content Include="SystemAdmin\UserInfo.aspx" />
-    <Content Include="SystemAdmin\UserList.aspx" />
     <Content Include="UserControls\ucPager.ascx" />
+    <Content Include="UserControls\ucPager2.ascx" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -132,19 +132,19 @@
     <Compile Include="SystemAdmin\UserInfo.aspx.designer.cs">
       <DependentUpon>UserInfo.aspx</DependentUpon>
     </Compile>
-    <Compile Include="SystemAdmin\UserList.aspx.cs">
-      <DependentUpon>UserList.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="SystemAdmin\UserList.aspx.designer.cs">
-      <DependentUpon>UserList.aspx</DependentUpon>
-    </Compile>
     <Compile Include="UserControls\ucPager.ascx.cs">
       <DependentUpon>ucPager.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="UserControls\ucPager.ascx.designer.cs">
       <DependentUpon>ucPager.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ucPager2.ascx.cs">
+      <DependentUpon>ucPager2.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="UserControls\ucPager2.ascx.designer.cs">
+      <DependentUpon>ucPager2.ascx</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>

@@ -49,11 +49,17 @@ namespace Ray0728am.SystemAdmin
                 //int totalPages = this.GetTotalPages(dt); // 取得總頁數
                 var dtPaged = this.GetPagedDataTable(dt);
 
+                //0804
+                this.ucPager2.TotalSize = dt.Rows.Count;
+                this.ucPager2.Bind();
+                //0804
+
                 this.gvAccountingList.DataSource = dtPaged; // 資料繫結
                 this.gvAccountingList.DataBind();
 
-                this.ucPager.TotalSize = dt.Rows.Count; //總頁數給dt筆數就好
-                this.ucPager.Bind(); // 可以利用 Method 來跟外界(這裡)溝通
+                // 0804砍掉 this.ucPager.TotalSize = dt.Rows.Count; //總頁數給dt筆數就好
+                // 0804砍掉 this.ucPager.Bind(); // 可以利用 Method 來跟外界(這裡)溝通
+
                 //// 0802--------------------------------------------------------
                 //var pages = (dt.Rows.Count / 10); // 計算共幾筆、共幾頁
                 //if (dt.Rows.Count % 10 > 0)
@@ -104,17 +110,22 @@ namespace Ray0728am.SystemAdmin
 
             return intPage;
         }
-
         private DataTable GetPagedDataTable(DataTable dt)
         {
             DataTable dtPaged = dt.Clone(); //只拿結構
             //dt.Copy(); // 除了結構還拿資料，但0筆的話會出錯
 
+            //0804
+            int pageSize = this.ucPager2.PageSize;
+            int startIndex = (this.GetCurrentPage() - 1) * pageSize;
+            int endIndex = this.GetCurrentPage() * pageSize;
+            //0804
+
             //foreach (DataRow dr in dt.Rows)
             //for (var i = 0; i < dt.Rows.Count; i++)
 
-            int startIndex = (this.GetCurrentPage() - 1) * 10;
-            int endIndex = this.GetCurrentPage() * 10;
+            //0804砍掉 int startIndex = (this.GetCurrentPage() - 1) * 10;
+            //0804砍掉 int endIndex = this.GetCurrentPage() * 10;
 
             if (endIndex > dt.Rows.Count)
                 endIndex = dt.Rows.Count;
@@ -139,6 +150,8 @@ namespace Ray0728am.SystemAdmin
             // dr = DataRows: 資料列
             // dc = DataColumns: 資料內容
         }
+
+
 
         protected void btnCreate_Click(object sender, EventArgs e)
         {

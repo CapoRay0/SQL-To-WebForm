@@ -69,7 +69,6 @@ namespace AccountingNote.DBsource
         //}
 
 
-
         public static DataRow ReadDataRow(string connStr, string dbCommand, List<SqlParameter> list) // AccountingManager的
         {
             using (SqlConnection conn = new SqlConnection(connStr))
@@ -77,7 +76,6 @@ namespace AccountingNote.DBsource
                 using (SqlCommand comm = new SqlCommand(dbCommand, conn))
                 {
                     comm.Parameters.AddRange(list.ToArray());
-
 
                     conn.Open();
                     var reader = comm.ExecuteReader();
@@ -94,7 +92,6 @@ namespace AccountingNote.DBsource
                 }
             }
         }
-
 
         // UpdateAccounting 與 DeleteAccounting 的重構
         public static int ModifyData(string connectionString, string dbCommandString, List<SqlParameter> paramList)
@@ -114,8 +111,7 @@ namespace AccountingNote.DBsource
                 }
             }
         }
-
-
+        
         // CreateAccounting 的重構
         public static void CreatData(string connStr, string dbCommand, List<SqlParameter> paramList)
         {

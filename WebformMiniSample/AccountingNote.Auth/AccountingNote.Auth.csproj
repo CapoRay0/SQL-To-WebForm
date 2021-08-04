@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{867B4CAD-80DD-4BCF-847A-78CEBA4B3CFB}</ProjectGuid>
+    <ProjectGuid>{60786F97-8F5A-4EAF-8D7A-22A9503A0B89}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>AccountingNote.Auth</RootNamespace>

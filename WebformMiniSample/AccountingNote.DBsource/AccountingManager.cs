@@ -112,7 +112,7 @@ namespace AccountingNote.DBsource
                        ,CreateDate
                        ,Body
                     )
-                VALUES
+                    VALUES
                     (
                         @userID
                        ,@caption
@@ -141,7 +141,7 @@ namespace AccountingNote.DBsource
             }
         }
 
-
+        
         /// <summary> 編輯流水帳 </summary>
         /// <param name="userID"></param>
         /// <param name="caption"></param>
@@ -160,7 +160,7 @@ namespace AccountingNote.DBsource
 
             string connStr = DBHelper.GetConnectionString();
             string dbCommand =
-                $@" UPDATE [dbo].[Accounting]
+                $@" UPDATE [Accounting]
                     SET
                        UserID      = @userID
                        ,Caption    = @caption
@@ -219,7 +219,7 @@ namespace AccountingNote.DBsource
 
 
         /// <summary> 刪除流水帳 </summary>
-        /// <param name="id"></param>
+        /// <param name="ID"></param>
         public static void DeleteAccounting(int ID)
         {
             string connectionString = DBHelper.GetConnectionString();

@@ -16,7 +16,7 @@ namespace AccountingNote.Auth
         /// <returns></returns>
         public static bool IsLogined()
         {
-            if (System.Web.HttpContext.Current.Session["UserLoginInfo"] == null)
+            if (HttpContext.Current.Session["UserLoginInfo"] == null)
                 return false;
             else
                 return true;
@@ -80,7 +80,7 @@ namespace AccountingNote.Auth
             //check null
             if (dr == null)
             {
-                errorMsg = "Account doesn't exists."; // 查不到的話
+                errorMsg = $"Account: {account} doesn't exists."; // 查不到的話
                 return false;
             }
 

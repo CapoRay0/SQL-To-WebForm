@@ -57,9 +57,9 @@ namespace Ray0728am.SystemAdmin
                 this.gvAccountingList.DataSource = dtPaged; // 資料繫結
                 this.gvAccountingList.DataBind();
 
+
                 // 0804砍掉 this.ucPager.TotalSize = dt.Rows.Count; //總頁數給dt筆數就好
                 // 0804砍掉 this.ucPager.Bind(); // 可以利用 Method 來跟外界(這裡)溝通
-
                 //// 0802--------------------------------------------------------
                 //var pages = (dt.Rows.Count / 10); // 計算共幾筆、共幾頁
                 //if (dt.Rows.Count % 10 > 0)

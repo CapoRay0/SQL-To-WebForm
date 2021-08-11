@@ -68,7 +68,7 @@
                     <%--<uc1:ucPager runat="server" ID="ucPager" PageSize="10" CurrentPage="1" TotalSize="10" Url="AccountingList.aspx" />--%>
 
                     <div <%--style="background-color:aqua"--%> >
-                        <uc1:ucPager2 runat="server" ID="ucPager2" PageSize="3" Url="/SystemAdmin/AccountingList.aspx"/>
+                        <uc1:ucPager2 runat="server" ID="ucPager2" PageSize="10" Url="/SystemAdmin/AccountingList.aspx"/>
                     </div>
 
                     <asp:PlaceHolder ID="plcNoData" runat="server" Visible="false">

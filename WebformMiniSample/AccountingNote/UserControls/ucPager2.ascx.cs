@@ -116,7 +116,7 @@ namespace Ray0728am.UserControls
             //if (nextP2 > totalPage)
             //    this.aLink5.Visible = false;
 
-            this.ltpager.Text = $"<br />共 {this.TotalSize} 筆，共 {totalPage} 頁，目前在第 {this.GetCurrentPage()} 頁~";
+            this.ltpager.Text = $"共 {this.TotalSize} 筆，共 {totalPage} 頁，目前在第 {this.GetCurrentPage()} 頁~<br/>";
         }
     }
 }

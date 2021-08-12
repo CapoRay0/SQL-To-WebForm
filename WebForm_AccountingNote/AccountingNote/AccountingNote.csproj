@@ -71,9 +71,11 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="About.aspx" />
+    <Content Include="AjaxAccountingNote.aspx" />
     <Content Include="Default.aspx" />
     <Content Include="Global.asax" />
     <Content Include="Login.aspx" />
+    <Content Include="Scripts\jQuery-min-3.6.0.js" />
     <Content Include="SystemAdmin\AccountingDetail.aspx" />
     <Content Include="SystemAdmin\AccountingList.aspx" />
     <Content Include="SystemAdmin\UserInfo.aspx" />
@@ -88,6 +90,13 @@
     </Compile>
     <Compile Include="About.aspx.designer.cs">
       <DependentUpon>About.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="AjaxAccountingNote.aspx.cs">
+      <DependentUpon>AjaxAccountingNote.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="AjaxAccountingNote.aspx.designer.cs">
+      <DependentUpon>AjaxAccountingNote.aspx</DependentUpon>
     </Compile>
     <Compile Include="Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>

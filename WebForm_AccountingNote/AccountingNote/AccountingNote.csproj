@@ -99,6 +99,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Handlers\AccountingNoteHandler.ashx.cs">
+      <DependentUpon>AccountingNoteHandler.ashx</DependentUpon>
+    </Compile>
     <Compile Include="Handlers\AccountingNoteList.ashx.cs">
       <DependentUpon>AccountingNoteList.ashx</DependentUpon>
     </Compile>
@@ -160,6 +163,7 @@
   <ItemGroup>
     <Content Include="Handlers\AccountingNoteList.ashx" />
     <Content Include="Handlers\CreateAccountingNote.ashx" />
+    <Content Include="Handlers\AccountingNoteHandler.ashx" />
     <None Include="packages.config" />
     <Content Include="SystemAdmin\Admin.Master" />
     <None Include="Web.Debug.config">

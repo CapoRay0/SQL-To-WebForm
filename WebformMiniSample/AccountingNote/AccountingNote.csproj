@@ -102,6 +102,9 @@
     <Compile Include="Handlers\AccountingNoteList.ashx.cs">
       <DependentUpon>AccountingNoteList.ashx</DependentUpon>
     </Compile>
+    <Compile Include="Handlers\CreateAccountingNote.ashx.cs">
+      <DependentUpon>CreateAccountingNote.ashx</DependentUpon>
+    </Compile>
     <Compile Include="Login.aspx.cs">
       <DependentUpon>Login.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -156,6 +159,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Handlers\AccountingNoteList.ashx" />
+    <Content Include="Handlers\CreateAccountingNote.ashx" />
     <None Include="packages.config" />
     <Content Include="SystemAdmin\Admin.Master" />
     <None Include="Web.Debug.config">

@@ -101,6 +101,15 @@ namespace AccountingNote.DBsource
                 throw new ArgumentException("ActType must be 0 or 1.");
             // <<<<< check input >>>>>
 
+            // 檢查傳進來的body參數
+            string bodyColumnSQL = "";
+            string bodyValueSQL = "";
+            if (!string.IsNullOrWhiteSpace(body))
+            {
+                bodyColumnSQL = ", Body";
+                bodyValueSQL = ", @body";
+            }
+
             string connStr = DBHelper.GetConnectionString();
             string dbCommand =
                 $@" INSERT INTO [dbo].[Accounting]
@@ -110,7 +119,7 @@ namespace AccountingNote.DBsource
                        ,Amount
                        ,ActType
                        ,CreateDate
-                       ,Body
+                       {bodyColumnSQL}
                     )
                     VALUES
                     (
@@ -119,18 +128,22 @@ namespace AccountingNote.DBsource
                        ,@amount
                        ,@actType
                        ,@createDate
-                       ,@body
+                       {bodyValueSQL}
                     )
                 ";
-
+            // connect db & execute
             List<SqlParameter> paramList = new List<SqlParameter>();
+            // comm.Parameters.AddWithValue("@userID", userID);
             paramList.Add(new SqlParameter("@userID", userID));
             paramList.Add(new SqlParameter("@caption", caption));
             paramList.Add(new SqlParameter("@amount", amount));
             paramList.Add(new SqlParameter("@actType", actType));
             paramList.Add(new SqlParameter("@createDate", DateTime.Now));
-            paramList.Add(new SqlParameter("@body", body));
-
+            //paramList.Add(new SqlParameter("@body", body));
+            // 0812pm
+            if (!string.IsNullOrWhiteSpace(body))
+                paramList.Add(new SqlParameter("@body", body));
+            //
             try
             {
                 DBHelper.CreatData(connStr, dbCommand, paramList);
@@ -158,6 +171,15 @@ namespace AccountingNote.DBsource
                 throw new ArgumentException("ActType must be 0 or 1.");
             // <<<<< check input >>>>>
 
+            // 檢查傳進來的body參數
+            string bodyColumnSQL = "";
+            string bodyValueSQL = "";
+            if (!string.IsNullOrWhiteSpace(body))
+            {
+                bodyColumnSQL = ", Body";
+                bodyValueSQL = " @body";
+            }
+
             string connStr = DBHelper.GetConnectionString();
             string dbCommand =
                 $@" UPDATE [Accounting]
@@ -167,7 +189,7 @@ namespace AccountingNote.DBsource
                        ,Amount     = @amount
                        ,ActType    = @actType
                        ,CreateDate = @createDate
-                       ,Body       = @body
+                       {bodyColumnSQL} = {bodyValueSQL}
                     WHERE
                         ID = @id ";
 
@@ -177,9 +199,11 @@ namespace AccountingNote.DBsource
             paramList.Add(new SqlParameter("@amount", amount));
             paramList.Add(new SqlParameter("@actType", actType));
             paramList.Add(new SqlParameter("@createDate", DateTime.Now));
-            paramList.Add(new SqlParameter("@body", body));
+            //
+            if (!string.IsNullOrWhiteSpace(body))
+                paramList.Add(new SqlParameter("@body", body));
             paramList.Add(new SqlParameter("@id", ID));
-
+            //
             try
             {
                 // connect db & execute

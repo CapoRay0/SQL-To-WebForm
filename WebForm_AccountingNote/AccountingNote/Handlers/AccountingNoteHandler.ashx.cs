@@ -34,7 +34,7 @@ namespace Ray0728am.Handlers
                 string body = context.Request.Form["Body"];
 
                 // ID of Ray
-                string id = "7E85BB22-C671-4150-8B97-1A6756ACFD72";
+                string UserId = "7E85BB22-C671-4150-8B97-1A6756ACFD72";
 
                 // 必填檢查
                 if (string.IsNullOrWhiteSpace(caption) ||
@@ -42,7 +42,6 @@ namespace Ray0728am.Handlers
                     string.IsNullOrWhiteSpace(actTypeText))
                 {
                     this.ProcessError(context, "caption, amount, actType is required.");
-
                     return;
                 }
 
@@ -52,16 +51,15 @@ namespace Ray0728am.Handlers
                     !int.TryParse(actTypeText, out tempActType))
                 {
                     this.ProcessError(context, "amount, actType should be a integer.");
-
                     return;
                 }
 
                 try
                 {
                     //建立流水帳
-                    AccountingManager.CreateAccounting(id, caption, tempAmount, tempActType, body);
+                    AccountingManager.CreateAccounting(UserId, caption, tempAmount, tempActType, body);
                     context.Response.ContentType = "text/plain";
-                    context.Response.Write("ok");
+                    context.Response.Write("Create Succeed");
                 }
                 catch (Exception ex)
                 {
@@ -73,6 +71,48 @@ namespace Ray0728am.Handlers
             }
             else if (actionName == "update")
             {
+                string caption = context.Request.Form["Caption"];
+                string amountText = context.Request.Form["Amount"];
+                string actTypeText = context.Request.Form["ActType"];
+                string body = context.Request.Form["Body"];
+                string idText = context.Request.Form["ID"];
+
+                // ID of Ray
+                string UserId = "7E85BB22-C671-4150-8B97-1A6756ACFD72";
+
+                // 必填檢查
+                if (string.IsNullOrWhiteSpace(caption) ||
+                    string.IsNullOrWhiteSpace(amountText) ||
+                    string.IsNullOrWhiteSpace(actTypeText) ||
+                    string.IsNullOrWhiteSpace(idText))
+                {
+                    this.ProcessError(context, "caption, amount, actType and ID is required.");
+                    return;
+                }
+
+                // 轉型
+                int tempAmount, tempActType, tempID; ;
+                if (!int.TryParse(amountText, out tempAmount) ||
+                    !int.TryParse(actTypeText, out tempActType) ||
+                    !int.TryParse(idText, out tempID))
+                {
+                    this.ProcessError(context, "amount, actType and ID should be a integer.");
+                    return;
+                }
+
+                try
+                {
+                    //建立流水帳
+                    AccountingManager.UpdateAccounting(tempID, UserId, caption, tempAmount, tempActType, body);
+                    context.Response.ContentType = "text/plain";
+                    context.Response.Write("Update Succeed");
+                }
+                catch (Exception ex)
+                {
+                    context.Response.StatusCode = 503;
+                    context.Response.ContentType = "text/plain";
+                    context.Response.Write("Error");
+                }
 
             }
             else if (actionName == "delete")

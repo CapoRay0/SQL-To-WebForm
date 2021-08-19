@@ -1,4 +1,6 @@
 ﻿using AccountingNote.DBsource;
+using AccountingNote.ORM.DBModels;
+using Ray0728am.Extensions;
 using Ray0728am.Models;
 using System;
 using System.Collections.Generic;
@@ -37,24 +39,38 @@ namespace Ray0728am.Handlers
                 return;
             }
 
+            // 一般來說得寫 Guid.TryParse("",out ~)，但難維護，因此寫擴充方法 >> StringExtension
+
             // 查詢這個使用者所有的流水帳
             string userID = dr["ID"].ToString();
-            DataTable dataTable = AccountingManager.GetAccountingList(userID); // 用使用者ID取得此使用者的所有流水帳
+            Guid userGUID = userID.ToGuid();
+            //DataTable dataTable = AccountingManager.GetAccountingList(userID); // 用使用者ID取得此使用者的所有流水帳
+            List<Accounting> sourceList = AccountingManager.GetAccountingList(userGUID);
 
-            List<AccountingNoteViewModel> list = new List<AccountingNoteViewModel>();
-            foreach(DataRow drAccounting in dataTable.Rows)
+            //List<AccountingNoteViewModel> list = new List<AccountingNoteViewModel>();
+            //foreach(DataRow drAccounting in dataTable.Rows)
+            //{
+            //    AccountingNoteViewModel model = new AccountingNoteViewModel()
+            //    {
+            //        ID = drAccounting["ID"].ToString(),
+            //        Caption = drAccounting["Caption"].ToString(),
+            //        Amount = drAccounting.Field<int>("Amount"),
+            //        ActType = (drAccounting.Field<int>("ActType") == 0) ? "支出" : "收入",
+            //        CreateDate = drAccounting.Field<DateTime>("CreateDate").ToString("yyyy-MM-dd")
+            //    };
+            //    list.Add(model);
+            //}
+            //string jsonText = Newtonsoft.Json.JsonConvert.SerializeObject(dataTable); // 序列化
+            List<AccountingNoteViewModel> list = sourceList.Select(obj => new AccountingNoteViewModel()
             {
-                AccountingNoteViewModel model = new AccountingNoteViewModel()
-                {
-                    ID = drAccounting["ID"].ToString(),
-                    Caption = drAccounting["Caption"].ToString(),
-                    Amount = drAccounting.Field<int>("Amount"),
-                    ActType = (drAccounting.Field<int>("ActType") == 0) ? "支出" : "收入",
-                    CreateDate = drAccounting.Field<DateTime>("CreateDate").ToString("yyyy-MM-dd")
-                };
-                list.Add(model);
-            }
-            string jsonText = Newtonsoft.Json.JsonConvert.SerializeObject(dataTable); // 序列化
+                ID = obj.ID.ToString(),
+                Caption = obj.Caption,
+                Amount = obj.Amount,
+                ActType = (obj.ActType == 0) ? "支出" : "收入",
+                CreateDate = obj.CreateDate.ToString("yyyy-MM-dd")
+            }).ToList();
+
+            string jsonText = Newtonsoft.Json.JsonConvert.SerializeObject(list); // 序列化
 
             context.Response.ContentType = "application/json";
             context.Response.Write(jsonText);

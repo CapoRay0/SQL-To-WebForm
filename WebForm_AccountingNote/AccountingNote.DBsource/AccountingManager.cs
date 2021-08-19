@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AccountingNote.ORM.DBModels;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -49,6 +50,30 @@ namespace AccountingNote.DBsource
             }
         }
 
+        public static List<Accounting> GetAccountingList(Guid userID)
+        {
+            try
+            {
+                //Guid.TryParse(userID, out Guid TempGuid);
+
+                using (ContextModel context = new ContextModel())
+                {
+                    var query =
+                        (from item in context.Accountings
+                         where item.UserID == userID
+                         select item);
+                    var list = query.ToList(); // 不能回傳 query 因為只有這裡使用 ORM
+                    // 回到網站後就沒有地方使用 ORM 了，變成"物件"的東西就跟 ORM 沒關係了
+                    return list;
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.WriteLog(ex);
+                return null;
+            }
+
+        }
 
         /// <summary> 查詢流水帳 </summary>
         /// <param name="id"></param>
@@ -154,7 +179,7 @@ namespace AccountingNote.DBsource
             }
         }
 
-        
+
         /// <summary> 編輯流水帳 </summary>
         /// <param name="userID"></param>
         /// <param name="caption"></param>

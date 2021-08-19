@@ -121,7 +121,27 @@ namespace Ray0728am.Handlers
             }
             else if (actionName == "list") 
             {
+                string userID = "7E85BB22-C671-4150-8B97-1A6756ACFD72";
 
+                DataTable dataTable = AccountingManager.GetAccountingList(userID); // 用使用者ID取得此使用者的所有流水帳
+
+                List<AccountingNoteViewModel> list = new List<AccountingNoteViewModel>();
+                foreach (DataRow drAccounting in dataTable.Rows)
+                {
+                    AccountingNoteViewModel model = new AccountingNoteViewModel()
+                    {
+                        ID = drAccounting["ID"].ToString(),
+                        Caption = drAccounting["Caption"].ToString(),
+                        Amount = drAccounting.Field<int>("Amount"),
+                        ActType = (drAccounting.Field<int>("ActType") == 0) ? "支出" : "收入",
+                        CreateDate = drAccounting.Field<DateTime>("CreateDate").ToString("yyyy-MM-dd")
+                    };
+                    list.Add(model);
+                }
+                string jsonText = Newtonsoft.Json.JsonConvert.SerializeObject(dataTable); // 序列化
+
+                context.Response.ContentType = "application/json";
+                context.Response.Write(jsonText);
             }
             else if (actionName == "query")
             {

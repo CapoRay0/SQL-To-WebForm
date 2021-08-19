@@ -19,6 +19,7 @@ namespace AccountingNote.DBsource
         //    return val;
         //}
 
+
         /// <summary> 查詢流水帳清單 </summary>
         /// <param name="userID"></param>
         /// <returns></returns>
@@ -50,6 +51,9 @@ namespace AccountingNote.DBsource
             }
         }
 
+        /// <summary> 查詢流水帳清單</summary>
+        /// <param name="userID"></param>
+        /// <returns></returns>
         public static List<Accounting> GetAccountingList(Guid userID)
         {
             try
@@ -108,7 +112,6 @@ namespace AccountingNote.DBsource
                 return null;
             }
         }
-
 
         /// <summary> 建立流水帳 </summary>
         /// <param name="userID"></param>
@@ -178,7 +181,6 @@ namespace AccountingNote.DBsource
                 Logger.WriteLog(ex);
             }
         }
-
 
         /// <summary> 編輯流水帳 </summary>
         /// <param name="userID"></param>
@@ -265,7 +267,6 @@ namespace AccountingNote.DBsource
                 return false;
             }
         }
-
 
         /// <summary> 刪除流水帳 </summary>
         /// <param name="ID"></param>

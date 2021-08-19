@@ -1,5 +1,6 @@
 ﻿using AccountingNote.Auth;
 using AccountingNote.DBsource;
+using AccountingNote.ORM.DBModels;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -42,36 +43,49 @@ namespace Ray0728am.SystemAdmin
 
 
             // read accounting data
-            var dt = AccountingManager.GetAccountingList(CurrentUser.ID);
+            //var dt = AccountingManager.GetAccountingList(CurrentUser.ID);
+            var list = AccountingManager.GetAccountingList(CurrentUser.UserGuid);
 
-            if (dt.Rows.Count > 0) // 如果DB有資料
+            //if (dt.Rows.Count > 0) // 如果DB有資料
+            //{
+            //    //int totalPages = this.GetTotalPages(dt); // 取得總頁數
+            //    var dtPaged = this.GetPagedDataTable(dt);
+
+            //    //0804
+            //    this.ucPager2.TotalSize = dt.Rows.Count;
+            //    this.ucPager2.Bind();
+            //    //0804
+
+            //    this.gvAccountingList.DataSource = dtPaged; // 資料繫結
+            //    this.gvAccountingList.DataBind();
+
+
+            //    // 0804砍掉 this.ucPager.TotalSize = dt.Rows.Count; //總頁數給dt筆數就好
+            //    // 0804砍掉 this.ucPager.Bind(); // 可以利用 Method 來跟外界(這裡)溝通
+            //    //// 0802--------------------------------------------------------
+            //    //var pages = (dt.Rows.Count / 10); // 計算共幾筆、共幾頁
+            //    //if (dt.Rows.Count % 10 > 0)
+            //    //    pages += 1;
+
+            //    //this.ltpager.Text = $"共 {dt.Rows.Count} 筆，共 {pages} 頁，目前在第 {this.GetCurrentPage()} 頁<br/>";
+            //    ////--------------------------------------------------------
+
+            //    //for (var i = 1; i <= totalPages; i++) // 總頁數
+            //    //{
+            //    //    this.ltpager.Text += $"<a href='AccountingList.aspx?page={i}'>{i}</a>&nbsp";
+            //    //}
+            //}
+            if (list.Count > 0) /***** 0819 *****/
             {
-                //int totalPages = this.GetTotalPages(dt); // 取得總頁數
-                var dtPaged = this.GetPagedDataTable(dt);
+                var pageList = this.GetPagedDataTable(list);
 
-                //0804
-                this.ucPager2.TotalSize = dt.Rows.Count;
-                this.ucPager2.Bind();
-                //0804
-
-                this.gvAccountingList.DataSource = dtPaged; // 資料繫結
+                //this.gvAccountingList.DataSource = dtPaged;
+                this.gvAccountingList.DataSource = pageList;
                 this.gvAccountingList.DataBind();
 
-
-                // 0804砍掉 this.ucPager.TotalSize = dt.Rows.Count; //總頁數給dt筆數就好
-                // 0804砍掉 this.ucPager.Bind(); // 可以利用 Method 來跟外界(這裡)溝通
-                //// 0802--------------------------------------------------------
-                //var pages = (dt.Rows.Count / 10); // 計算共幾筆、共幾頁
-                //if (dt.Rows.Count % 10 > 0)
-                //    pages += 1;
-
-                //this.ltpager.Text = $"共 {dt.Rows.Count} 筆，共 {pages} 頁，目前在第 {this.GetCurrentPage()} 頁<br/>";
-                ////--------------------------------------------------------
-
-                //for (var i = 1; i <= totalPages; i++) // 總頁數
-                //{
-                //    this.ltpager.Text += $"<a href='AccountingList.aspx?page={i}'>{i}</a>&nbsp";
-                //}
+                //this.ucPager2.TotalSize = dt.Rows.Count;
+                this.ucPager2.TotalSize = list.Count;
+                this.ucPager2.Bind();
             }
             else
             {
@@ -94,7 +108,7 @@ namespace Ray0728am.SystemAdmin
         //    //15 => 1
         //}
 
-        private int GetCurrentPage()    
+        private int GetCurrentPage()
         {
             string pageText = Request.QueryString["Page"];
 
@@ -110,6 +124,17 @@ namespace Ray0728am.SystemAdmin
 
             return intPage;
         }
+
+        private List<Accounting> GetPagedDataTable(List<Accounting> list) // 0819
+        {
+            int pageSize = this.ucPager2.PageSize;
+            int startIndex = (this.GetCurrentPage() - 1) * pageSize;
+            //int endIndex = this.GetCurrentPage() * pageSize;
+
+            return list.Skip(startIndex).Take(10).ToList();
+        }
+
+        // 有以上的 List 之後以下 DataTable 就可以不用了
         private DataTable GetPagedDataTable(DataTable dt)
         {
             DataTable dtPaged = dt.Clone(); //只拿結構
@@ -150,8 +175,7 @@ namespace Ray0728am.SystemAdmin
             // dr = DataRows: 資料列
             // dc = DataColumns: 資料內容
         }
-
-
+        // 以上 DataTable 可註解
 
         protected void btnCreate_Click(object sender, EventArgs e)
         {
@@ -168,21 +192,24 @@ namespace Ray0728am.SystemAdmin
                 Label lbl = row.FindControl("lblActType") as Label;
                 //ltl.Text = "OK";
 
-                var dr = row.DataItem as DataRowView;
-                int actType = dr.Row.Field<int>("ActType");
+                //var dr = row.DataItem as DataRowView;
+                //int actType = dr.Row.Field<int>("ActType");
+                var rowData = row.DataItem as Accounting;
+                int actType = rowData.ActType;
 
                 switch (actType)
                 {
                     case 0:
                         lbl.Text = "支出";
-                        if (dr.Row.Field<int>("Amount") > 1500)
+                        //if (dr.Row.Field<int>("Amount") > 1500)
+                        if (rowData.Amount > 1500)
                         {
                             lbl.ForeColor = Color.Red;
                         }
                         break;
                     case 1:
                         lbl.Text = "收入";
-                        if (dr.Row.Field<int>("Amount") > 1500)
+                        if (rowData.Amount > 1500)
                         {
                             lbl.ForeColor = Color.Blue;
                         }

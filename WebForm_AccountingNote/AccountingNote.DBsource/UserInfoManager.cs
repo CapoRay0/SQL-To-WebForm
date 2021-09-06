@@ -12,6 +12,49 @@ namespace AccountingNote.DBsource
 {
     public class UserInfoManager
     {
+        public static List<UserInfo> GetUserInfoList()
+        {
+            try
+            {
+                using (ContextModel context = new ContextModel())
+                {
+                    var query = context.UserInfoes;
+                    var list = query.ToList();
+                    return list;
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.WriteLog(ex);
+                return null;
+            }
+        }
+
+        //透過 id 查出使用者
+        public static UserInfo GetUserInfo(Guid id)
+        {
+            try
+            {
+                using (ContextModel context = new ContextModel())
+                {
+                    var query =
+                    (from item in context.UserInfoes
+                     where item.ID == id
+                     select item);
+
+                    var obj = query.FirstOrDefault();
+                    return obj;
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.WriteLog(ex);
+                return null;
+            }
+        }
+
+
+
 
         //private static string GetConnectionString()
         //{

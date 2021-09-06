@@ -75,7 +75,7 @@ namespace Ray0728am.Handlers
                     context.Response.ContentType = "text/plain";
                     context.Response.Write("Create Succeed");
                 }
-                catch (Exception ex)
+                catch /*(Exception ex)*/
                 {
                     context.Response.StatusCode = 503;
                     context.Response.ContentType = "text/plain";
@@ -133,7 +133,7 @@ namespace Ray0728am.Handlers
                     context.Response.ContentType = "text/plain";
                     context.Response.Write("Update Succeed");
                 }
-                catch (Exception ex)
+                catch/* (Exception ex)*/
                 {
                     context.Response.StatusCode = 503;
                     context.Response.ContentType = "text/plain";

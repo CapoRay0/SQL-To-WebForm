@@ -65,7 +65,9 @@
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Drawing" />
-    <Reference Include="System.Web" />
+    <Reference Include="System.Web">
+      <HintPath>..\..\..\..\..\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.8\System.Web.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Web.Services" />
@@ -86,7 +88,9 @@
     <Content Include="Scripts\jQuery-min-3.6.0.js" />
     <Content Include="SystemAdmin\AccountingDetail.aspx" />
     <Content Include="SystemAdmin\AccountingList.aspx" />
+    <Content Include="SystemAdmin\UserAuth.aspx" />
     <Content Include="SystemAdmin\UserInfo.aspx" />
+    <Content Include="SystemAdmin\UserList.aspx" />
     <Content Include="UserControls\ucPager.ascx" />
     <Content Include="UserControls\ucPager2.ascx" />
     <Content Include="Web.config" />
@@ -156,12 +160,26 @@
     <Compile Include="SystemAdmin\Admin.Master.designer.cs">
       <DependentUpon>Admin.Master</DependentUpon>
     </Compile>
+    <Compile Include="SystemAdmin\UserAuth.aspx.cs">
+      <DependentUpon>UserAuth.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="SystemAdmin\UserAuth.aspx.designer.cs">
+      <DependentUpon>UserAuth.aspx</DependentUpon>
+    </Compile>
     <Compile Include="SystemAdmin\UserInfo.aspx.cs">
       <DependentUpon>UserInfo.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="SystemAdmin\UserInfo.aspx.designer.cs">
       <DependentUpon>UserInfo.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="SystemAdmin\UserList.aspx.cs">
+      <DependentUpon>UserList.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="SystemAdmin\UserList.aspx.designer.cs">
+      <DependentUpon>UserList.aspx</DependentUpon>
     </Compile>
     <Compile Include="UserControls\ucPager.ascx.cs">
       <DependentUpon>ucPager.ascx</DependentUpon>

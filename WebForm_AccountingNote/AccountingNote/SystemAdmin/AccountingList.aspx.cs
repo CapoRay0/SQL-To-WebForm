@@ -32,6 +32,18 @@ namespace Ray0728am.SystemAdmin
                 Response.Redirect("/Login.aspx");
                 return;
             }
+
+
+
+            //// 檢查是否已授權
+            //if(!AuthManager.IsGrant(CurrentUser.ID, new string[] { RoleName }))
+            //{
+            //    Response.Redirect("UserInfo.aspx");
+            //    return;
+            //}
+
+
+
             //string account = this.Session["UserLoginInfo"] as string;
             //var dr = UserInfoManager.GetUserInfoByAccount(account);
 

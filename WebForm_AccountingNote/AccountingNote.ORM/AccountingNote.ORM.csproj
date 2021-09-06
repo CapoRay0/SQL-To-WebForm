@@ -52,7 +52,10 @@
   <ItemGroup>
     <Compile Include="DBModels\Accounting.cs" />
     <Compile Include="DBModels\ContextModel.cs" />
+    <Compile Include="DBModels\ContextModel0906.cs" />
+    <Compile Include="DBModels\Role.cs" />
     <Compile Include="DBModels\UserInfo.cs" />
+    <Compile Include="DBModels\UserRole.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

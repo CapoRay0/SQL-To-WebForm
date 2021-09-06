@@ -55,6 +55,7 @@
     <Compile Include="AccountingManager.cs" />
     <Compile Include="DBHelper.cs" />
     <Compile Include="Logger.cs" />
+    <Compile Include="RoleManager.cs" />
     <Compile Include="UserInfoManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

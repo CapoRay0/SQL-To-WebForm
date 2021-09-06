@@ -13,5 +13,10 @@ namespace Ray0728am
         {
 
         }
+
+        protected void btnEntry_Click(object sender, EventArgs e)
+        {
+            Response.Redirect("/Login.aspx");
+        }
     }
 }

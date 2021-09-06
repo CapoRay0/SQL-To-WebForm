@@ -1,4 +1,6 @@
 ﻿using AccountingNote.DBsource;
+using AccountingNote.ORM.DBModels;
+using Ray0728am.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -55,7 +57,17 @@ namespace Ray0728am.Handlers
             }
 
             //建立流水帳
-            AccountingManager.CreateAccounting(id, caption, tempAmount, tempActType, body);
+            //---------------資料容器--------------//
+            Accounting accounting = new Accounting()
+            {
+                UserID = id.ToGuid(),
+                ActType = tempActType,
+                Amount = tempAmount,
+                Caption = caption,
+                Body = body,
+            };
+            //-----------------------------//
+            AccountingManager.CreateAccounting(accounting);
 
             context.Response.ContentType = "text/plain";
             context.Response.Write("ok");

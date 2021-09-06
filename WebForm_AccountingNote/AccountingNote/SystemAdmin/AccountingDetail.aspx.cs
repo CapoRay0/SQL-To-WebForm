@@ -1,5 +1,7 @@
 ﻿using AccountingNote.Auth;
 using AccountingNote.DBsource;
+using AccountingNote.ORM.DBModels;
+using Ray0728am.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -53,9 +55,10 @@ namespace Ray0728am.SystemAdmin
                     int id;
                     if (int.TryParse(idText, out id)) // 檢查是否能轉型成數字
                     {
-                        var drAccounting = AccountingManager.GetAccounting(id, CurrentUser.ID);
+                        //var drAccounting = AccountingManager.GetAccounting(id, CurrentUser.ID);
+                        var accounting = AccountingManager.GetAccounting(id, CurrentUser.ID);
 
-                        if (drAccounting == null)
+                        if (accounting == null)
                         {
                             this.ltmsg.Text = "Data doesn't exist";
                             this.btnSave.Visible = false;
@@ -63,10 +66,14 @@ namespace Ray0728am.SystemAdmin
                         }
                         else // 把原本的資料帶入編輯頁面以供使用者編輯!!
                         {
-                            this.ddlActType.SelectedValue = drAccounting["ActType"].ToString();
-                            this.txtAmount.Text = drAccounting["Amount"].ToString();
-                            this.txtCaption.Text = drAccounting["Caption"].ToString();
-                            this.txtDesc.Text = drAccounting["Body"].ToString();
+                            //this.ddlActType.SelectedValue = drAccounting["ActType"].ToString();
+                            //this.txtAmount.Text = drAccounting["Amount"].ToString();
+                            //this.txtCaption.Text = drAccounting["Caption"].ToString();
+                            //this.txtDesc.Text = drAccounting["Body"].ToString();
+                            this.ddlActType.SelectedValue = accounting.ActType.ToString();
+                            this.txtAmount.Text = accounting.Amount.ToString();
+                            this.txtCaption.Text = accounting.Caption;
+                            this.txtDesc.Text = accounting.Body;
                         }
                     }
                     else
@@ -105,21 +112,41 @@ namespace Ray0728am.SystemAdmin
 
             var CurrentUser = AuthManager.GetCurrentUser();
             // Input txt
-            string userID = CurrentUser.ID;
+            string userID = CurrentUser.ID.ToString();
             string actTypeText = this.ddlActType.SelectedValue;
             string amountText = this.txtAmount.Text;
-            string caption = this.txtCaption.Text;
-            string body = this.txtDesc.Text;
-
+            //string caption = this.txtCaption.Text;
+            //string body = this.txtDesc.Text;
             int amount = Convert.ToInt32(amountText);
             int actType = Convert.ToInt32(actTypeText);
 
             // Check is create mode or edit mode
             string idText = this.Request.QueryString["ID"];
+            Accounting accounting = new Accounting()
+            {
+                UserID = userID.ToGuid(),
+                ActType = actType,
+                Amount = amount,
+                Caption = this.txtCaption.Text,
+                Body = this.txtDesc.Text
+            };
+
             if (string.IsNullOrWhiteSpace(idText))
             {
-                // Execute 'Insert into db'
-                AccountingManager.CreateAccounting(userID, caption, amount, actType, body);
+                //// Execute 'Insert into db'
+                //// 0819
+                //AccountingManager.CreateAccounting(userID, caption, amount, actType, body);
+
+                //Accounting accounting = new Accounting()
+                //{
+                //    UserID = userID.ToGuid(),
+                //    ActType = actType,
+                //    Amount = amount,
+                //    Caption = caption,
+                //    Body = body
+                //};
+
+                AccountingManager.CreateAccounting(accounting);
             }
             else
             {
@@ -127,7 +154,20 @@ namespace Ray0728am.SystemAdmin
                 if (int.TryParse(idText, out id))
                 {
                     // Execute 'update db'
-                    AccountingManager.UpdateAccounting(id, userID, caption, amount, actType, body);
+                    //AccountingManager.UpdateAccounting(id, userID, caption, amount, actType, body);
+
+                    //Accounting accounting = new Accounting()
+                    //{
+                    //    ID = id,
+                    //    UserID = userID.ToGuid(),
+                    //    ActType = actType,
+                    //    Amount = amount,
+                    //    Caption = caption,
+                    //    Body = body
+                    //};
+                    accounting.ID = id;
+
+                    AccountingManager.UpdateAccounting(accounting);
                 }
             }
 
@@ -183,7 +223,8 @@ namespace Ray0728am.SystemAdmin
             if (int.TryParse(idText, out id))
             {
                 // Execute 'delete db'
-                AccountingManager.DeleteAccounting(id);
+                //AccountingManager.DeleteAccounting(id);
+                AccountingManager.DeleteAccounting_ORM(id);
             }
             Response.Redirect("/SystemAdmin/AccountingList.aspx");
         }

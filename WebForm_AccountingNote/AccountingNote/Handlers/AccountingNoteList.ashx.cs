@@ -30,9 +30,11 @@ namespace Ray0728am.Handlers
                 return;
             }
 
-            var dr = UserInfoManager.GetUserInfoByAccount(account);
+            //var dr = UserInfoManager.GetUserInfoByAccount(account);
+            var userInfo = UserInfoManager.GetUserInfoByAccount_ORM(account);
 
-            if (dr == null)
+            //if (dr == null)
+            if (userInfo == null)
             {
                 context.Response.StatusCode = 404;
                 context.Response.End();
@@ -42,8 +44,12 @@ namespace Ray0728am.Handlers
             // 一般來說得寫 Guid.TryParse("",out ~)，但難維護，因此寫擴充方法 >> StringExtension
 
             // 查詢這個使用者所有的流水帳
-            string userID = dr["ID"].ToString();
-            Guid userGUID = userID.ToGuid();
+            //string userID = dr["ID"].ToString();
+
+            //string userID = userInfo.ID.ToString(); // Guid 轉 String
+            //Guid userGUID = userID.ToGuid(); // String 轉 Guid
+            Guid userGUID = userInfo.ID;
+
             //DataTable dataTable = AccountingManager.GetAccountingList(userID); // 用使用者ID取得此使用者的所有流水帳
             List<Accounting> sourceList = AccountingManager.GetAccountingList(userGUID);
 

@@ -68,6 +68,7 @@ namespace AccountingNote.DBsource
                          select item);
                     var list = query.ToList(); // 不能回傳 query 因為只有這裡使用 ORM
                     // 回到網站後就沒有地方使用 ORM 了，變成"物件"的東西就跟 ORM 沒關係了
+                    //將資料由DataTable轉成List => IEnumberable
                     return list;
                 }
             }
@@ -105,6 +106,32 @@ namespace AccountingNote.DBsource
             try
             {
                 return DBHelper.ReadDataRow(connStr, dbCommand, list);
+            }
+            catch (Exception ex)
+            {
+                Logger.WriteLog(ex);
+                return null;
+            }
+        }
+
+        /// <summary> 查詢流水帳 </summary>
+        /// <param name="id"></param>
+        /// <param name="userID"></param>
+        /// <returns></returns>
+        public static Accounting GetAccounting(int id, Guid userID)
+        {
+            try
+            {
+                using (ContextModel context = new ContextModel())
+                {
+                    var query =
+                        (from item in context.Accountings
+                         where item.ID == id && item.UserID == userID
+                         select item);
+
+                    var obj = query.FirstOrDefault();
+                    return obj;
+                }
             }
             catch (Exception ex)
             {
@@ -175,6 +202,33 @@ namespace AccountingNote.DBsource
             try
             {
                 DBHelper.CreatData(connStr, dbCommand, paramList);
+            }
+            catch (Exception ex)
+            {
+                Logger.WriteLog(ex);
+            }
+        }
+
+        /// <summary> 建立流水帳 </summary>
+        /// <param name="accounting"></param>
+        public static void CreateAccounting(Accounting accounting)
+        {
+            // <<<<< check input >>>>>
+            if (accounting.Amount < 0 || accounting.Amount > 1000000)
+                throw new ArgumentException("Amount must between 0 and 1,000,000.");
+
+            if (accounting.ActType < 0 || accounting.ActType > 1)
+                throw new ArgumentException("ActType must be 0 or 1.");
+            // <<<<< check input >>>>>
+
+            try
+            {
+                using (ContextModel context = new ContextModel())
+                {
+                    accounting.CreateDate = DateTime.Now;
+                    context.Accountings.Add(accounting);
+                    context.SaveChanges();
+                }
             }
             catch (Exception ex)
             {
@@ -268,6 +322,47 @@ namespace AccountingNote.DBsource
             }
         }
 
+        /// <summary> 編輯流水帳 </summary>
+        /// <param name="accounting"></param>
+        /// <returns></returns>
+        public static bool UpdateAccounting(Accounting accounting)
+        {
+            // <<<<< check input >>>>>
+            if (accounting.Amount < 0 || accounting.Amount > 1000000)
+                throw new ArgumentException("Amount must between 0 and 1,000,000.");
+
+            if (accounting.ActType < 0 || accounting.ActType > 1)
+                throw new ArgumentException("ActType must be 0 or 1.");
+            // <<<<< check input >>>>>
+
+            try
+            {
+                using (ContextModel context = new ContextModel())
+                {
+                    var dbObject = context.Accountings.Where(obj => obj.ID == accounting.ID).FirstOrDefault();
+                    if (dbObject != null)
+                    {
+                        dbObject.Caption = accounting.Caption;
+                        dbObject.Body = accounting.Body;
+                        dbObject.Amount = accounting.Amount;
+                        dbObject.ActType = accounting.ActType;
+
+                        context.SaveChanges();
+
+                        return false;
+                    }
+
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.WriteLog(ex);
+                return false;
+            }
+
+        }
+
         /// <summary> 刪除流水帳 </summary>
         /// <param name="ID"></param>
         public static void DeleteAccounting(int ID)
@@ -290,6 +385,24 @@ namespace AccountingNote.DBsource
             }
         }
 
-
+        public static void DeleteAccounting_ORM(int ID)
+        {
+            try
+            {
+                using (ContextModel context = new ContextModel())
+                {
+                    var dbObject = context.Accountings.Where(obj => obj.ID == ID).FirstOrDefault();
+                    if (dbObject != null)
+                    {
+                        context.Accountings.Remove(dbObject);
+                        context.SaveChanges();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.WriteLog(ex);
+            }
+        }
     }
 }

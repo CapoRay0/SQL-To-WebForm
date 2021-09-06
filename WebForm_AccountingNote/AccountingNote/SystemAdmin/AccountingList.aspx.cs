@@ -1,6 +1,7 @@
 ﻿using AccountingNote.Auth;
 using AccountingNote.DBsource;
 using AccountingNote.ORM.DBModels;
+using Ray0728am.Models;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -14,6 +15,8 @@ namespace Ray0728am.SystemAdmin
 {
     public partial class AccountingList : System.Web.UI.Page
     {
+        //string RoleName = "FinanceClerk";
+
         protected void Page_Load(object sender, EventArgs e)
         {
             // check is logined
@@ -35,12 +38,12 @@ namespace Ray0728am.SystemAdmin
 
 
 
-            //// 檢查是否已授權
-            //if(!AuthManager.IsGrant(CurrentUser.ID, new string[] { RoleName }))
-            //{
-            //    Response.Redirect("UserInfo.aspx");
-            //    return;
-            //}
+            // 檢查是否已授權
+            if (!AuthManager.IsGrant(CurrentUser.ID, new string[]{ StaticText.RoleName_Announting_FinanceClerk }))
+            {
+                Response.Redirect("UserInfo.aspx");
+                return;
+            }
 
 
 

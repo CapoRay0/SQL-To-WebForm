@@ -2,6 +2,7 @@
 using AccountingNote.DBsource;
 using AccountingNote.ORM.DBModels;
 using Ray0728am.Extensions;
+using Ray0728am.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,6 +32,15 @@ namespace Ray0728am.SystemAdmin
                 Response.Redirect("/Login.aspx");
                 return;
             }
+
+
+            // 檢查是否已授權
+            if (!AuthManager.IsGrant(CurrentUser.ID, new string[]{ StaticText.RoleName_Announting_FinanceClerk }))
+            {
+                Response.Redirect("UserInfo.aspx");
+                return;
+            }
+
             //string account = this.Session["UserLoginInfo"] as string;
             //var drUserInfo = UserInfoManager.GetUserInfoByAccount(account);
 
